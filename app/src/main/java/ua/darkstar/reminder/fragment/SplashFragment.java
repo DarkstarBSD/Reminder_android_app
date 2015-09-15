@@ -1,4 +1,4 @@
-package ua.darkstar.reminder;
+package ua.darkstar.reminder.fragment;
 
 
 import android.os.AsyncTask;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.concurrent.TimeUnit;
+
+import ua.darkstar.reminder.R;
 
 
 /**
