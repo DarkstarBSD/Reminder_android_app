@@ -3,6 +3,7 @@ package ua.darkstar.reminder;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -51,9 +52,17 @@ public class MainActivity extends AppCompatActivity {
         if (!preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)) {
             SplashFragment splashFragment = new SplashFragment();
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, splashFragment)
+                    .replace(R.id.content_frame     , splashFragment)
                     .addToBackStack(null)
                     .commit();
+        }
+    }
+
+    public void setUI(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null){
+            toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+            setSupportActionBar(toolbar);
         }
     }
 }
