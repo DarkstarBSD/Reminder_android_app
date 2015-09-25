@@ -15,21 +15,34 @@ import android.widget.Toast;
 
 import ua.darkstar.reminder.adapter.TabAdapter;
 import ua.darkstar.reminder.dialog.AddingTaskDialogFragment;
+import ua.darkstar.reminder.fragment.CurrentTaskFragment;
+import ua.darkstar.reminder.fragment.DoneTaskFragment;
 import ua.darkstar.reminder.fragment.SplashFragment;
+import ua.darkstar.reminder.model.ModelTask;
 
-public class MainActivity extends AppCompatActivity implements AddingTaskDialogFragment.AddingTaskListener{
+public class MainActivity extends AppCompatActivity
+        implements AddingTaskDialogFragment.AddingTaskListener {
 
     FragmentManager fragmentManager;
+
     PreferenceHelper preferenceHelper;
+    TabAdapter tabAdapter;
+
+    CurrentTaskFragment currentTaskFragment;
+    DoneTaskFragment doneTaskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         PreferenceHelper.getInstance().init(getApplicationContext());
         preferenceHelper = PreferenceHelper.getInstance();
+
         fragmentManager = getFragmentManager();
+
         runSplash();
+
         setUI();
     }
 
@@ -59,19 +72,19 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
         return super.onOptionsItemSelected(item);
     }
 
-    public void runSplash(){
-        if (!preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)) {
+    public void runSplash() {
+        if(!preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)) {
             SplashFragment splashFragment = new SplashFragment();
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame     , splashFragment)
+                    .replace(R.id.content_frame, splashFragment)
                     .addToBackStack(null)
                     .commit();
         }
     }
 
-    public void setUI(){
+    private void setUI() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null){
+        if (toolbar != null) {
             toolbar.setTitleTextColor(getResources().getColor(R.color.white));
             setSupportActionBar(toolbar);
         }
@@ -79,10 +92,13 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.current_task));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.done_task));
+
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        TabAdapter tabAdapter = new TabAdapter(fragmentManager, 2);
+        tabAdapter = new TabAdapter(fragmentManager, 2);
+
         viewPager.setAdapter(tabAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -98,26 +114,29 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-
         });
+
+        currentTaskFragment = (CurrentTaskFragment) tabAdapter.getItem(TabAdapter.CURRENT_TASK_FRAGMENT_POSITION);
+        doneTaskFragment = (DoneTaskFragment) tabAdapter.getItem(TabAdapter.DONE_TASK_FRAGMENT_POSITION);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment addingTaskDialogFragment = new AddingTaskDialogFragment();
-                addingTaskDialogFragment.show(fragmentManager, "AddingTaskDialogFragment ");
+                addingTaskDialogFragment.show(fragmentManager, "AddingTaskDialogFragment");
             }
         });
-
     }
 
     @Override
-    public void onTaskAdded() {
-        Toast.makeText(this, "Task added.", Toast.LENGTH_LONG).show();
+    public void onTaskAdded(ModelTask newTask) {
+        currentTaskFragment.addTask(newTask);
     }
 
     @Override
     public void onTaskAddingCancel() {
-        Toast.makeText(this, "Task adding canceled.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Task adding cancel", Toast.LENGTH_LONG).show();
+
     }
 }

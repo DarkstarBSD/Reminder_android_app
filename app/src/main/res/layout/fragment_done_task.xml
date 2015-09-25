@@ -1,15 +1,15 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ua.darkstar.reminder.fragment.DoneTaskFragment">
+    tools:context="info.fandroid.reminder.fragment.DoneTaskFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Done tasks"
-        android:textSize="35sp"
-        android:layout_gravity="center"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvDoneTasks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:clipToPadding="false"
+        android:paddingBottom="88dp"/>
 </FrameLayout>

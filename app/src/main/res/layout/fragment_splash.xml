@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ua.darkstar.reminder.fragment.SplashFragment"
+    tools:context="info.fandroid.reminder.fragment.SplashFragment"
     android:background="@color/white">
+
 
     <ImageView
         android:layout_width="wrap_content"
