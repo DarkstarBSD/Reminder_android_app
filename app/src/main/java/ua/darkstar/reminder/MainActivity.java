@@ -18,18 +18,21 @@ import ua.darkstar.reminder.dialog.AddingTaskDialogFragment;
 import ua.darkstar.reminder.fragment.CurrentTaskFragment;
 import ua.darkstar.reminder.fragment.DoneTaskFragment;
 import ua.darkstar.reminder.fragment.SplashFragment;
+import ua.darkstar.reminder.fragment.TaskFragment;
 import ua.darkstar.reminder.model.ModelTask;
 
 public class MainActivity extends AppCompatActivity
-        implements AddingTaskDialogFragment.AddingTaskListener {
+        implements AddingTaskDialogFragment.AddingTaskListener,
+        DoneTaskFragment.OnTaskRestoreListener,
+        CurrentTaskFragment.OnTaskDoneListener {
 
     FragmentManager fragmentManager;
 
     PreferenceHelper preferenceHelper;
     TabAdapter tabAdapter;
 
-    CurrentTaskFragment currentTaskFragment;
-    DoneTaskFragment doneTaskFragment;
+    TaskFragment currentTaskFragment;
+    TaskFragment doneTaskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void runSplash() {
-        if(!preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)) {
+        if (!preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)) {
             SplashFragment splashFragment = new SplashFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, splashFragment)
@@ -138,5 +141,15 @@ public class MainActivity extends AppCompatActivity
     public void onTaskAddingCancel() {
         Toast.makeText(this, "Task adding cancel", Toast.LENGTH_LONG).show();
 
+    }
+
+    @Override
+    public void onTaskDone(ModelTask task) {
+        doneTaskFragment.addTask(task);
+    }
+
+    @Override
+    public void onTaskRestore(ModelTask task) {
+        currentTaskFragment.addTask(task);
     }
 }
